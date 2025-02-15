@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Participantes</title>
+    <!-- Adicionando Bootstrap para melhorar a aparência -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Estilo personalizado -->
+    <style>
+        body {
+            background-color: #f0f8ff; /* Fundo azul claro */
+            font-family: 'Arial', sans-serif;
+        }
+
+        .container {
+            background-color: #ffffff; /* Fundo branco para o conteúdo */
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+        }
+
+        h1 {
+            color: #20B2AA; /* Verde-água para o título */
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+            margin-bottom: 1.5rem;
+        }
+
+        .card:hover {
+            transform: translateY(-5px); /* Efeito de levantar ao passar o mouse */
+        }
+
+        .card-img-top {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            height: 200px;
+            object-fit: cover; /* Garante que a imagem cubra o espaço sem distorção */
+        }
+
+        .card-title {
+            color: #20B2AA; /* Verde-água para o título do participante */
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .card-text {
+            color: #555; /* Cor do texto mais suave */
+        }
+
+        .btn-dark {
+            background-color: #20B2AA; /* Verde-água para o botão */
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .btn-dark:hover {
+            background-color: #1E90FF; /* Azul claro ao passar o mouse */
+            transform: scale(1.05); /* Efeito de crescimento */
+        }
+
+        .btn-voltar {
+            background-color: #20B2AA; /* Verde-água */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 25px;
+            text-align: center;
+            display: block;
+            margin: 2rem auto;
+            width: fit-content;
+            transition: background-color 0.3s, transform 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-voltar:hover {
+            background-color: #1E90FF; /* Azul claro ao passar o mouse */
+            transform: scale(1.05); /* Efeito de crescimento */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Participantes</h1>
+
+        <!-- Exibindo os participantes -->
+        <div class="row">
+            {% for participante in participantes %}
+            <div class="col-md-4 mb-4">
+                <div class="card text-center">
+                    <img src="{{ participante['imagem'] }}" class="card-img-top" alt="Foto do Participante">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ participante['nome'] }}</h5>
+                        <p class="card-text">Email: {{ participante['email'] }}</p>
+                        <a href="{{ participante['link_github'] }}" class="btn btn-dark">GitHub</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Botão destacado para voltar à página inicial -->
+        <a href="/" class="btn-voltar">Voltar à Página Inicial</a>
+    </div>
+</body>
+</html>
