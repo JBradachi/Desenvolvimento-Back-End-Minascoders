@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minascoders</title>
+</head>
+    <body>
+        <form method="POST" enctype="multipart/form-data">
+            <label for="noticia">digite o nome da notícia </label>
+            <input type="text" id="titulo" name="titulo" required>
+            <br>
+            <label for="resumo">digite o resumo da notícia </label>
+            <input type="text" id="resumo" name="resumo" required>
+            <br>
+            <label for="autor">digite o autor da notícia </label>
+            <input type="text" id="autor" name="autor" required>
+            <br>
+            <label for="imagem">insira a imagem da notícia </label>
+            <input type="file" id="imagem" name="imagem" accept="image/png" required> 
+            <br>
+            <label for="data">insira a data da notícia </label>
+            <input type="date" id="data" name="data" required>
+            <br>
+            <input type="submit" value="Send" id="submit">
+        </form>
+    </body>
+</html>

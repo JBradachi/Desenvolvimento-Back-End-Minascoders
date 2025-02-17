@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Notícias</title>
+    <!-- Adicionando Bootstrap para melhorar a aparência -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Estilo personalizado -->
+    <style>
+        body {
+            background-color: #f0f8ff; /* Fundo azul claro */
+            font-family: 'Arial', sans-serif;
+        }
+
+        .container {
+            background-color: #ffffff; /* Fundo branco para o conteúdo */
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #20B2AA; /* Verde-água para o título */
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+            margin-bottom: 1.5rem;
+        }
+
+        .card:hover {
+            transform: translateY(-5px); /* Efeito de levantar ao passar o mouse */
+        }
+
+        .card-title {
+            color: #20B2AA; /* Verde-água para o título da notícia */
+        }
+
+        .card-text {
+            color: #555; /* Cor do texto mais suave */
+        }
+
+        .text-muted {
+            color: #777; /* Cor mais suave para o autor e data */
+        }
+
+        .btn-voltar {
+            background-color: #20B2AA; /* Verde-água */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 25px;
+            text-align: center;
+            display: block;
+            margin: 2rem auto;
+            width: fit-content;
+            transition: background-color 0.3s, transform 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-voltar:hover {
+            background-color: #1E90FF; /* Azul claro ao passar o mouse */
+            transform: scale(1.05); /* Efeito de crescimento */
+        }
+    </style>
+</head>
+
+<body class="container mt-4">
+    <h1 class="text-center mb-4">Notícias</h1>
+    <!-- Exibindo as notícias -->
+    {% for noticia in noticias %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h3 class="card-title">{{ noticia.titulo }}</h3>
+                <p class="card-text">{{ noticia.resumo }}</p>
+                <p class="text-muted">Publicado por {{ noticia.autor }} em {{ noticia.data_publicacao }}</p>
+                {% if noticia.imagem %}
+                    <p class="img-path">path {{ noticia.imagem }}</p>
+                    <img src="{{ noticia.imagem }}" class="img-fluid mb-3" alt="Imagem da Notícia">
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+
+    <!-- Botão destacado para voltar à página inicial -->
+    <a href="/" class="btn-voltar">Voltar à Página Inicial</a>
+</body>
+</html>
