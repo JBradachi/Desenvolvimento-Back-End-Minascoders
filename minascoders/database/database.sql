@@ -49,8 +49,8 @@ CREATE TABLE IF NOT EXISTS participantes (
 
 -- Inserir notícias (evitando duplicatas)
 INSERT IGNORE INTO noticia (titulo, data_publicacao, resumo, autor, imagem) VALUES
-('MinasCoders no Pódio da Maratona Sydle Levty de Programação da SECOM', '2024-12-14', 'Equipe do MinasCoders conquistou lugar no pódio da maratona, destacando-se em desafios de programação.', 'João Silva', 'https://example.com/imagem1.jpg'),
-('Subgrupos do MinasCoders no SIPEEC', '2024-12-11', 'Os subgrupos do MinasCoders apresentaram seus projetos inovadores no SIPEEC, destacando suas contribuições tecnológicas.', 'Maria Oliveira', 'https://example.com/imagem2.jpg'),
+('MinasCoders no Pódio da Maratona Sydle Levty de Programação da SECOM', '2024-12-14', 'Equipe do MinasCoders conquistou lugar no pódio da maratona, destacando-se em desafios de programação.', 'João Silva', '/images/grey_red_tree.png'),
+('Subgrupos do MinasCoders no SIPEEC', '2024-12-11', 'Os subgrupos do MinasCoders apresentaram seus projetos inovadores no SIPEEC, destacando suas contribuições tecnológicas.', 'Maria Oliveira', '/images/hollow-knight.png'),
 ('MinasCoders Pesquisa no SIPEEC', '2024-12-10', 'O MinasCoders apresentou suas pesquisas mais recentes no SIPEEC, focando em inovações tecnológicas e científicas.', 'Carlos Souza', 'https://example.com/imagem3.jpg'),
 ('Equipes Selecionadas para a Semana Imersiva da Campus Mobile', '2024-12-09', 'Equipes do MinasCoders foram selecionadas para a Semana Imersiva da Campus Mobile, um evento de intensivo em desenvolvimento mobile.', 'João Silva', 'https://example.com/imagem4.jpg'),
 ('MinasCoders na Maratona de Programação da SECOM Jr.', '2024-12-08', 'MinasCoders brilhou na Maratona da SECOM Jr., destacando-se em resolução de problemas e desafios técnicos.', 'Maria Oliveira', 'https://example.com/imagem5.jpg'),
