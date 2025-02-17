@@ -78,12 +78,11 @@
         <div class="card mb-3">
             <div class="card-body">
                 <h3 class="card-title">{{ noticia.titulo }}</h3>
+                {% if noticia.imagem %}
+                    <img src="{{noticia.imagem}}" class="img-fluid mb-3" alt="Imagem da Notícia">
+                {% endif %}
                 <p class="card-text">{{ noticia.resumo }}</p>
                 <p class="text-muted">Publicado por {{ noticia.autor }} em {{ noticia.data_publicacao }}</p>
-                {% if noticia.imagem %}
-                    <p class="img-path">path {{ noticia.imagem }}</p>
-                    <img src="{{ noticia.imagem }}" class="img-fluid mb-3" alt="Imagem da Notícia">
-                {% endif %}
             </div>
         </div>
     {% endfor %}

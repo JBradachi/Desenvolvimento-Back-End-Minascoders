@@ -4,9 +4,9 @@ from flask_cors import CORS
 from werkzeug.utils import secure_filename
 import os
 
+# Configurações
 app = Flask(__name__)
 CORS(app)
-
 
 UPLOAD_FOLDER = 'images'
 
@@ -20,13 +20,18 @@ def testeHome():
 
 @app.route('/noticias')
 def noticias():
+
+    # Requisita um cursor e faz a consulta
     cur = mydb.cursor()
-    cur.execute("SELECT * FROM noticia ORDER BY data_publicacao DESC")
-    noticias = cur.fetchall()
-    cur.close()
+    cur.execute("""SELECT * FROM noticia 
+                ORDER BY data_publicacao DESC""")
+    
+    noticias = cur.fetchall() # Função que tras as info do cursor para uma var
+    cur.close() # Importantíssimo fechar o cursor
 
     # Faz o tratamento dos dados
     noticiasTratadas = list()
+    
     for noticia in noticias:
         noticiasTratadas.append(
             {
@@ -38,70 +43,76 @@ def noticias():
             'imagem': noticia[5]
             }
         )
-
+    
+    # Passa dados tratados para o html/jinja
     return render_template('noticias.html', noticias=noticiasTratadas)
 
 @app.route('/adicionarNoticia', methods=['GET', 'POST'])
-def adicionar_noticia():
+def adicionarNoticia():
     if request.method == 'POST':
+
         # Obtendo os dados do formulário
         titulo = request.form['titulo']
         resumo = request.form['resumo']
         autor = request.form['autor']
-        #imagem = request.form['imagem']
         data_publicacao = request.form['data']
 
-        # Validando os dados
-        if not titulo or not resumo or not autor or not data_publicacao:
-            flash('Todos os campos são obrigatórios!', 'error')
-        else:
-            # Inserindo a notícia no banco de dados
+        try:
             
-            try:
-                if 'imagem' not in request.files:
-                    return 'Nenhum arquivo enviado', 400
+            filename = salvaImagem('imagem')
 
-                file = request.files['imagem']
+            cur = mydb.cursor()
+            cur.execute(
+                """INSERT INTO noticia 
+                (titulo, resumo, autor, imagem, data_publicacao) 
+                VALUES (%s, %s, %s, %s, %s)""",
+                (titulo, resumo, autor, filename, data_publicacao)
+            )
 
-                if file.filename == '':
-                    return 'Nenhum arquivo selecionado', 400
+            # Faz commit da consulta de inserção sql
+            mydb.commit()
 
-                # Crie a pasta 'uploads' se não existir
-                if not os.path.exists(UPLOAD_FOLDER):
-                    os.makedirs(UPLOAD_FOLDER)
-                
-                filename = os.path.join(UPLOAD_FOLDER, secure_filename(file.filename))
+            flash('Notícia adicionada com sucesso!', 'success')
 
-                file.save(filename)
-
-                imagem = filename
-
-                cur = mydb.cursor()
-                cur.execute(
-                    "INSERT INTO noticia (titulo, resumo, autor, imagem, data_publicacao) VALUES (%s, %s, %s, %s, %s)",
-                    (titulo, resumo, autor, imagem, data_publicacao)
-                )
-                mydb.commit()
-
-                flash('Notícia adicionada com sucesso!', 'success')
-            except Exception as e:
-                mydb.rollback()
-                flash(f'Erro ao adicionar notícia: {str(e)}', 'error')
-            
-            cur.close()
+        except Exception as e:
+            mydb.rollback()
+            flash(f'Erro ao adicionar notícia: {str(e)}', 'error')
+        
+        cur.close()
 
         return redirect(url_for('noticias'))
 
     # Se o método for GET, exibe o formulário
     return render_template('adicionarNoticia.html')
 
-@app.route('/noticias/<filename>')
-def servidorDeImagem():
-    pass
+def salvaImagem(idImagem):
+    """idImagem é o mesmo id que voce coloca no input
+    do html"""
 
-if __name__ == "__main__":
+    if idImagem not in request.files:
+        return 'Nenhum arquivo enviado', 400
 
-    # Conecta com o banco
+    file = request.files[idImagem]
+
+    # Crie a pasta 'uploads' se não existir
+    if not os.path.exists(app.config['UPLOAD_FOLDER']):
+        os.makedirs(app.config['UPLOAD_FOLDER'])
+    
+    filename = os.path.join("", app.config['UPLOAD_FOLDER'], 
+                            secure_filename(file.filename))
+    
+    # Salva a imagem na pasta dedicada
+    file.save(filename)
+
+    return filename
+
+@app.route('/images/<filename>')
+def servidorDeImagem(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+if __name__ == "__main__": 
+
+    # Conectando com o banco
     app_host='db'
     app_user='root'
     app_password='root'
@@ -125,6 +136,7 @@ if __name__ == "__main__":
 
     print("Banco conectado")
 
+    #TODO: criar arquivo .env e colocar todas as variáveis
     app.secret_key = 'super secret key'
 
     app.run(debug=True, port=5000, host='0.0.0.0')
