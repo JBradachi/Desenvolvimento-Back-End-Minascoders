@@ -4,25 +4,88 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minascoders</title>
+
+    <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #fafdff;
+                
+            }
+
+            h1 {
+                color: #20B2AA; 
+                font-weight: bold;
+                margin-bottom: 2rem;
+                text-align: center;
+            }
+
+            form {
+                background-color: #ffffff;
+                padding: 2rem;
+                border-radius: 8px;
+                width: 100%;
+                max-width: 500px; 
+                display: block;
+                margin: 2rem auto;
+            
+            }
+
+
+            input[type="text"], input[type="file"], input[type="date"] {
+                width: 100%;
+                padding: 0.5rem;
+                margin-bottom: 1rem;
+            }
+
+            input[type="submit"] {
+                width: 100%;
+                padding: 0.75rem;
+                background-color: #20B2AA;
+                color: white;
+                margin-left: 0.5rem;
+                cursor: pointer;
+                
+            }
+
+            .home {
+                background-color: #20B2AA; 
+                color: white;
+                padding: 0.75rem;
+                font-size: 1rem;
+                border-radius: 15px;
+                cursor: pointer;
+                display: block;
+                margin: 2rem auto;
+                width: fit-content;
+                text-decoration: none;
+
+        }
+
+    </style>
 </head>
     <body>
+        <h1>Publicar notícia</h1>
+
         <form method="POST" enctype="multipart/form-data">
-            <label for="noticia">digite o nome da notícia </label>
+            <label for="noticia">Título: </label>
             <input type="text" id="titulo" name="titulo" required>
             <br>
-            <label for="resumo">digite o resumo da notícia </label>
+            <label for="resumo">Resumo: </label>
             <input type="text" id="resumo" name="resumo" required>
             <br>
-            <label for="autor">digite o autor da notícia </label>
+            <label for="autor">Autor: </label>
             <input type="text" id="autor" name="autor" required>
             <br>
-            <label for="imagem">insira a imagem da notícia </label>
+            <label for="imagem">Imagem: </label>
             <input type="file" id="imagem" name="imagem" accept="image/png" required> 
             <br>
-            <label for="data">insira a data da notícia </label>
+            <label for="data">Data: </label>
             <input type="date" id="data" name="data" required>
             <br>
             <input type="submit" value="Send" id="submit">
         </form>
+
+        <a href="/" class="home">Voltar à Página Inicial</a>
+
     </body>
 </html>

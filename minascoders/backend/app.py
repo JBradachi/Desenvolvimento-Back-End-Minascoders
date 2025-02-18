@@ -47,7 +47,7 @@ def noticias():
     # Passa dados tratados para o html/jinja
     return render_template('noticias.html', noticias=noticiasTratadas)
 
-@app.route('/adicionarNoticia', methods=['GET', 'POST'])
+@app.route('/Dashboard/Noticia/Inserir', methods=['GET', 'POST'])
 def adicionarNoticia():
     if request.method == 'POST':
 
@@ -109,6 +109,45 @@ def salvaImagem(idImagem):
 @app.route('/images/<filename>')
 def servidorDeImagem(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+
+@app.route('/Dashboard', methods=['GET'])
+def Dashboard():
+       
+    return render_template("dashboard.html")
+
+@app.route('/Dashboard/Noticia', methods=['GET','POST'])
+def DashboardNoticia():
+        
+    return render_template("dashboardNoticia.html")
+
+@app.route('/Dashboard/Noticia/Remover', methods=['GET','POST'])
+def removerNoticia():
+
+    cur = mydb.cursor()
+
+    if request.method == 'POST':
+        titulo = request.form.get('titulo')
+
+        if titulo:
+            cur.execute("DELETE FROM noticia WHERE titulo = %s", (titulo,))
+            mydb.commit()  
+
+    cur.execute("SELECT * FROM noticia ORDER BY data_publicacao DESC")
+    noticias = cur.fetchall()
+    cur.close()
+
+    noticiasTratadas = list()
+    
+    for noticia in noticias:
+        noticiasTratadas.append(
+            {
+            'titulo': noticia[1],
+            }
+        )
+   
+    return render_template('removerNoticia.html', noticias=noticiasTratadas)
+
 
 if __name__ == "__main__": 
 
