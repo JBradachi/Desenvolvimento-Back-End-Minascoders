@@ -8,6 +8,7 @@ import os
 app = Flask(__name__)
 CORS(app)
 
+# Diretório de onde as imagens serão persistir 
 UPLOAD_FOLDER = 'images'
 
 app = Flask(__name__)
@@ -94,7 +95,7 @@ def salvaImagem(idImagem):
 
     file = request.files[idImagem]
 
-    # Crie a pasta 'uploads' se não existir
+    # Crie a pasta 'images' se não existir
     if not os.path.exists(app.config['UPLOAD_FOLDER']):
         os.makedirs(app.config['UPLOAD_FOLDER'])
     
@@ -110,6 +111,34 @@ def salvaImagem(idImagem):
 def servidorDeImagem(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
+@app.route('/dashboard/home')
+def dashboardHome():
+    return 0
+
+@app.route('/dashboard/home/patrocinador')
+def dashboardHomePatrocinador():
+    return 0
+
+@app.route('/dashboard/home/participante')
+def dashboardHomeParticipantes():
+    return 0
+
+@app.route('/dashboard/home/patrocinador/inserir')
+def method_name():
+    pass
+
+@app.route('/dashboard/home/patrocinador/remover')
+def method_name():
+    pass
+
+@app.route('/dashboard/home/participante/inserir')
+def method_name():
+    pass
+
+@app.route('/dashboard/home/participante/remover')
+def method_name():
+    pass
+
 if __name__ == "__main__": 
 
     # Conectando com o banco
@@ -121,7 +150,7 @@ if __name__ == "__main__":
 
     # Como o container do banco demora para iniciar
     # o algorítmo fica tentando conectar até ele
-    # liberar as conexões e de fato conectar
+    # liberar as conexões e de fato conectar.
     # a solução dessa gambiarra seria usar Kubernetes talvez
     try:
         mydb = mysql.connector.connect(
