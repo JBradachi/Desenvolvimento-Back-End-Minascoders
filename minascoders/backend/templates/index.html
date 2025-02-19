@@ -4,8 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minascoders</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
-    <body>
-        <h1>Funcionou?</h1>
-    </body>
+<body>
+    <header>
+        <h1>Bem-vindo ao site Minascoders</h1>
+        <div>
+            <a href="{{ url_for('noticias') }}">Notícias</a>
+            <a href="{{ url_for('dashboardHome') }}">Dashboard</a>
+        </div>
+    </header>
+
+    <main>
+        <h2>Projeto desenvolvido por:</h2>
+        <div class="participantes">
+            {% for participante in participantes %}
+                <div class="participante">
+                    <img src="{{ participante['imagem'] }}" alt="{{ participante['nome'] }}" class="foto">
+                    <p><strong>{{ participante['nome'] }}</strong></p>
+                    <p>{{ participante['email'] }}</p>
+                    <p><a href="{{ participante['link_github'] }}" target="_blank">GitHub</a></p>
+                </div>
+            {% endfor %}
+        </div>
+    </main>
+
+    <footer>
+        <div class="carousel">
+            {% for patrocinador in patrocinadores %}
+                <a href="{{ patrocinador['link_site'] }}" target="_blank">
+                    <img src="{{ patrocinador['imagem'] }}" alt="{{ patrocinador['nome'] }}">
+                </a>
+            {% endfor %}
+        </div>
+    </footer>
+</body>
 </html>
