@@ -26,18 +26,18 @@ CREATE TABLE IF NOT EXISTS noticia (
 );
 
 -- Tabela de patrocinadores
-CREATE TABLE IF NOT EXISTS patrocinadores (
+CREATE TABLE IF NOT EXISTS patrocinador (
     id INTEGER NOT NULL AUTO_INCREMENT,
     nome VARCHAR(255) NOT NULL,
-    nivel VARCHAR(50),
+    nivel INTEGER,
     link_site VARCHAR(255),
-    imagem TEXT,  -- Campo para URL da imagem
+    logo TEXT,  -- Campo para URL da logo
     PRIMARY KEY (id),
     UNIQUE (nome) -- Evita duplicatas
 );
 
 -- Tabela de participantes
-CREATE TABLE IF NOT EXISTS participantes (
+CREATE TABLE IF NOT EXISTS participante (
     id INTEGER NOT NULL AUTO_INCREMENT,
     nome VARCHAR(255) NOT NULL,
     email VARCHAR(100),
@@ -58,18 +58,18 @@ INSERT IGNORE INTO noticia (titulo, data_publicacao, resumo, autor, imagem) VALU
 ('Equipes Selecionadas para a Semana Imersiva da Campus Mobile', '2024-12-06', 'Novas equipes do MinasCoders foram escolhidas para a Semana Imersiva da Campus Mobile, focada em aprimorar habilidades em programação móvel.', 'João Silva', 'https://example.com/imagem7.jpg');
 
 -- Inserir patrocinadores (evitando duplicatas)
-INSERT IGNORE INTO patrocinadores (nome, nivel, link_site, imagem) VALUES
-('Afterverse', 'Ouro', 'https://afterverse.com/pt', 'https://afterverse.com/_nuxt/img/logo.8c0d728.svg'),
-('Acasistemas', 'Prata', 'https://acasistemas.com.br/', 'https://acasistemas.com.br/assets/images/aca-site-logo-320x119.png'),
-('Vetta SMS Group', 'Prata', 'https://vetta.com.br/pt', 'https://www.vetta.digital/assets/img/logo/vetta.svg'),
-('DTI', 'Prata', 'https://www.dtidigital.com.br/', 'https://sindinfor.org.br/wp-content/uploads/2021/02/case-dti-1280x640-1.jpg'),
-('Cinnecta', 'Parceiro', 'https://www.matera.com/br/cinnecta-agora-e-matera-insights/', 'https://kptl.com.br/wp-content/uploads/2020/04/cinnecta-1.png'),
-('CIANDT', 'Parceiro', 'https://ciandt.com/br//', 'https://dmwnh9nwzeoaa.cloudfront.net/2020-12/devops-ciandt-thumb.png'),
-('FAPEMIG', 'Parceiro', 'https://fapemig.br/pt/', 'https://www2.ufjf.br/inovacaogv/wp-content/uploads/sites/69/2022/07/fapemig-e1661178865786.jpeg'),
-('FemaleTechLeaders', 'Parceiro', 'https://femaletechleaders.com.br./', 'https://femaletechleadersmagazine.com/wp-content/uploads/2021/04/female-tech-leaders-logo-1.png'),
-('Meninas Digitais', 'Parceiro', 'https://meninas.sbc.org.br/', 'https://horizontes.sbc.org.br/wp-content/uploads/2024/06/meninas_digitaisSmall.png'),
-('NESPeD', 'Parceiro', 'https://nesped.caf.ufv.br/', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbPUaWfak5_WG1C6wdDryiUnnEMTlPNw-XYg&s');
+INSERT IGNORE INTO patrocinador (nome, nivel, link_site, logo) VALUES
+('Afterverse', '5', 'https://afterverse.com/pt', 'https://afterverse.com/_nuxt/img/logo.8c0d728.svg'),
+('Acasistemas', '4', 'https://acasistemas.com.br/', 'https://acasistemas.com.br/assets/images/aca-site-logo-320x119.png'),
+('Vetta SMS Group', '4', 'https://vetta.com.br/pt', 'https://www.vetta.digital/assets/img/logo/vetta.svg'),
+('DTI', '4', 'https://www.dtidigital.com.br/', 'https://sindinfor.org.br/wp-content/uploads/2021/02/case-dti-1280x640-1.jpg'),
+('Cinnecta', '3', 'https://www.matera.com/br/cinnecta-agora-e-matera-insights/', 'https://kptl.com.br/wp-content/uploads/2020/04/cinnecta-1.png'),
+('CIANDT', '3', 'https://ciandt.com/br//', 'https://dmwnh9nwzeoaa.cloudfront.net/2020-12/devops-ciandt-thumb.png'),
+('FAPEMIG', '3', 'https://fapemig.br/pt/', 'https://www2.ufjf.br/inovacaogv/wp-content/uploads/sites/69/2022/07/fapemig-e1661178865786.jpeg'),
+('FemaleTechLeaders', '3', 'https://femaletechleaders.com.br./', 'https://femaletechleadersmagazine.com/wp-content/uploads/2021/04/female-tech-leaders-logo-1.png'),
+('Meninas Digitais', '3', 'https://meninas.sbc.org.br/', 'https://horizontes.sbc.org.br/wp-content/uploads/2024/06/meninas_digitaisSmall.png'),
+('NESPeD', '3', 'https://nesped.caf.ufv.br/', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbPUaWfak5_WG1C6wdDryiUnnEMTlPNw-XYg&s');
 
 -- Inserir participantes (evitando duplicatas)
-INSERT IGNORE INTO participantes (nome, email, link_github, imagem) VALUES
+INSERT IGNORE INTO participante (nome, email, link_github, imagem) VALUES
 ('Rafaella Ferreira', 'rafaella.pinheiro@ufv.br', 'https://github.com/Rafafps', 'https://ufvvirtuallabs-oficial.web.app/static/media/rafaela.870ff8cca9ec5f06edc8.jpeg');

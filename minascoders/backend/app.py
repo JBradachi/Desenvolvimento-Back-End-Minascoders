@@ -107,37 +107,197 @@ def salvaImagem(idImagem):
 
     return filename
 
+def removeImagem(pathDB):
+    pathLogoTratado = pathDB[0][0]
+
+    if os.path.exists(pathLogoTratado):
+        os.remove(pathLogoTratado)
+
 @app.route('/images/<filename>')
 def servidorDeImagem(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 @app.route('/dashboard/home')
 def dashboardHome():
-    return 0
+    return render_template("dashboardHome.html")
 
-@app.route('/dashboard/home/patrocinador')
-def dashboardHomePatrocinador():
-    return 0
+@app.route('/dashboard/home/inserirPatrocinador', methods=['GET', 'POST'])
+def inserePatrocinador():
+    if request.method == "POST":
 
-@app.route('/dashboard/home/participante')
-def dashboardHomeParticipantes():
-    return 0
+        # Obtendo os dados do formulário
+        nome = request.form['nome']
+        nivel = request.form['nivel']
+        link = request.form['link']
 
-@app.route('/dashboard/home/patrocinador/inserir')
-def method_name():
-    pass
+        try:
+            
+            filename = salvaImagem('logo')
 
-@app.route('/dashboard/home/patrocinador/remover')
-def method_name():
-    pass
+            cur = mydb.cursor()
+            cur.execute(
+                """INSERT IGNORE INTO patrocinador 
+                (nome, nivel, link_site, logo) 
+                VALUES (%s, %s, %s, %s)""",
+                (nome, nivel, link, filename)
+            )
 
-@app.route('/dashboard/home/participante/inserir')
-def method_name():
-    pass
+            # Faz commit da consulta de inserção sql
+            mydb.commit()
 
-@app.route('/dashboard/home/participante/remover')
-def method_name():
-    pass
+            flash('Notícia adicionada com sucesso!', 'success')
+
+        except Exception as e:
+            mydb.rollback()
+            flash(f'Erro ao adicionar notícia: {str(e)}', 'error')
+        
+        cur.close()
+
+        return redirect(url_for("dashboardHome"))
+    
+    return render_template("inserePatrocinador.html")
+
+@app.route('/dashboard/home/removerPatrocinador', methods=['GET', 'POST'])
+def removePatrocinador():
+    if request.method == "POST":
+
+        nomePatrocinador = request.form['patrocinador']
+
+        try:
+
+            cur = mydb.cursor()
+
+            cur.execute("""SELECT logo 
+                FROM patrocinador 
+                WHERE nome = %s""", (nomePatrocinador,))
+            
+            pathLogo = cur.fetchall()
+            removeImagem(pathLogo)
+
+            cur.execute("""DELETE
+                        FROM patrocinador
+                        WHERE nome = %s""", (nomePatrocinador,))
+
+            mydb.commit()
+            flash('Notícia adicionada com sucesso!', 'success')
+
+        except Exception as e:
+            mydb.rollback()
+            flash(f'Erro ao remover patrocinador: {str(e)}', 'error')
+
+        cur.close()
+
+        return redirect(url_for("dashboardHome"))
+    
+    # Se for GET:
+
+    cur = mydb.cursor()
+    cur.execute("""SELECT nome FROM patrocinador""")
+    
+    patrocinadores = cur.fetchall() # Função que tras as info do cursor para uma var
+    cur.close() # Importantíssimo fechar o cursor
+
+    # Faz o tratamento dos dados
+    patrocinadoresTratados = list()
+    
+    for patrocinador in patrocinadores:
+        patrocinadoresTratados.append(
+            {
+            'nome': patrocinador[0],
+            }
+        )
+    
+    return render_template("removerPatrocinador.html", patrocinadores=patrocinadoresTratados)
+
+@app.route('/dashboard/home/inserirParticipante', methods=['GET', 'POST'])
+def insereParticipante():
+    if request.method == "POST":
+
+        # Obtendo os dados do formulário
+        nome = request.form['nome']
+        email = request.form['email']
+        linkgh = request.form['linkgh']
+
+        try:
+            
+            filename = salvaImagem('imagem')
+
+            cur = mydb.cursor()
+            cur.execute(
+                """INSERT IGNORE INTO participante 
+                (nome, email, link_github, imagem) 
+                VALUES (%s, %s, %s, %s)""",
+                (nome, email, linkgh, filename)
+            )
+
+            # Faz commit da consulta de inserção sql
+            mydb.commit()
+
+            flash('Notícia adicionada com sucesso!', 'success')
+
+        except Exception as e:
+            mydb.rollback()
+            flash(f'Erro ao adicionar notícia: {str(e)}', 'error')
+        
+        cur.close()
+
+
+        return redirect(url_for("dashboardHome"))
+    
+    return render_template("insereParticipante.html")
+
+@app.route('/dashboard/home/removerParticipante', methods=['GET', 'POST'])
+def removeParticipante():
+    if request.method == "POST":
+
+        nomeParticipante = request.form['participante']
+
+        try:
+
+            cur = mydb.cursor()
+            
+            cur.execute("""SELECT imagem 
+                        FROM participante 
+                        WHERE nome = %s""", (nomeParticipante,))
+            
+            pathImagem = cur.fetchall()
+            removeImagem(pathImagem)
+
+            cur.execute("""DELETE
+                        FROM participante
+                        WHERE nome = %s""", (nomeParticipante,))
+
+            mydb.commit()
+            flash('Notícia adicionada com sucesso!', 'success')
+
+        except Exception as e:
+            mydb.rollback()
+            flash(f'Erro ao remover participante: {str(e)}', 'error')
+
+        cur.close()
+
+        return redirect(url_for("dashboardHome"))
+    
+    # Se for GET:
+
+    cur = mydb.cursor()
+    cur.execute("""SELECT nome FROM participante""")
+    
+    participantees = cur.fetchall() # Função que tras as info do cursor para uma var
+    cur.close() # Importantíssimo fechar o cursor
+
+    # Faz o tratamento dos dados
+    participantesTratados = list()
+    
+    for participante in participantees:
+        participantesTratados.append(
+            {
+            'nome': participante[0],
+            }
+        )
+    
+    return render_template("removerParticipante.html", participantes=participantesTratados)
+
 
 if __name__ == "__main__": 
 
