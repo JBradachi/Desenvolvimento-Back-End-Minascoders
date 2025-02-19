@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-br" dir=""ltr>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DASHBOARD</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #fafdff;
+            }
+
+            .navbar {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                position: fixed;
+                width: 100%;
+                top: 0;
+                left: 0;
+                background-color: #20B2AA;
+                padding: 10px 20px;
+                
+            }
+
+            .navbar a {
+                color: white;
+                font-weight: bold;
+                padding: 8px 40px; 
+                border-radius: 10px;
+                background-color: rgba(0, 0, 0, 0.2);
+                 
+            }
+
+
+            .container {
+                margin-top: 80px; 
+                text-align: center;
+                padding: 20px;
+            }
+
+            h1 {
+                color: #20B2AA; 
+                font-weight: bold;
+                text-align: center;
+                margin-bottom: 2rem;
+            }
+
+            .menu a {
+                display: block;
+                margin: 10px auto;
+                padding: 10px 15px;
+                text-decoration: none;
+                color: white;
+                background-color: #20B2AA;
+                border-radius: 5px;
+                width: 200px;
+                text-align: center;
+                transition: background 0.3s ease;
+            }
+
+            
+        </style>
+    </head>
+
+    <body>
+
+        
+        <div class="navbar">
+            <a href="/">Voltar à Página Inicial</a>
+        </div>
+
+        
+        <div class="container">
+            <h1>Dashboard</h1>
+            <p>Selecione a aba que deseja modificar:</p>
+
+            <div class="menu">
+                <a href="/dashboard/noticia">Notícia</a>
+                <a href="/dashboard/mainPage">Página Inicial</a>
+            </div>
+        </div>
+
+    </body>
+</html>
