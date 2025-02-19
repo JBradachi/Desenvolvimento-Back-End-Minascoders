@@ -72,4 +72,6 @@ INSERT IGNORE INTO patrocinador (nome, nivel, link_site, logo) VALUES
 
 -- Inserir participantes (evitando duplicatas)
 INSERT IGNORE INTO participante (nome, email, link_github, imagem) VALUES
-('Rafaella Ferreira', 'rafaella.pinheiro@ufv.br', 'https://github.com/Rafafps', 'https://ufvvirtuallabs-oficial.web.app/static/media/rafaela.870ff8cca9ec5f06edc8.jpeg');
+('Rafaella Ferreira', 'rafaella.pinheiro@ufv.br', 'https://github.com/Rafafps', 'https://ufvvirtuallabs-oficial.web.app/static/media/rafaela.870ff8cca9ec5f06edc8.jpeg'),
+('Ingred Almeida', 'ingred.almeida@ufv.br', 'https://github.com/ingredalmeida1', '/static/images/ingred_perfil.jpeg'),
+('João Bradachi', 'joao.bradachi@ufv.br', 'https://github.com/JBradachi', '/static/images/bradas_perfil.jpeg');
