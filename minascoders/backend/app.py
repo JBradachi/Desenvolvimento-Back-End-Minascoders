@@ -16,8 +16,48 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 @app.route('/')
-def testeHome():
-    return render_template("index.html")
+def home():
+    cur = mydb.cursor()
+    cur.execute("SELECT nome, nivel, link_site, imagem FROM patrocinadores")
+    
+    patrocinadores = cur.fetchall()
+    cur.close()
+
+    patrocinadoresTratados = []
+    for patrocinador in patrocinadores:
+        patrocinadoresTratados.append({
+            'nome': patrocinador[0],
+            'nivel': patrocinador[1],
+            'link_site': patrocinador[2],
+            'imagem': patrocinador[3]
+        })
+
+    participantes = get_participantes()
+    return render_template("index.html", patrocinadores=patrocinadoresTratados, participantes=participantes)
+
+def get_participantes():
+    cur = mydb.cursor()
+    cur.execute("""
+            INSERT IGNORE INTO participantes (nome, email, link_github, imagem)
+            VALUES ('Ingred Almeida', 'ingred.almeida@ufv.br', 'https://github.com/ingredalmeida1', '/static/images/ingred_perfil.jpeg');
+        """)
+    mydb.commit()
+    cur.close()
+
+    cur = mydb.cursor()
+    cur.execute("SELECT nome, email, link_github, imagem FROM participantes")
+    participantes = cur.fetchall()
+    cur.close()
+
+    participantesTratados = []
+    for participante in participantes:
+        participantesTratados.append({
+            'nome': participante[0],
+            'email': participante[1],
+            'link_github': participante[2],
+            'imagem': participante[3],
+        })
+    return participantesTratados
 
 @app.route('/noticias')
 def noticias():
@@ -297,6 +337,7 @@ def removeParticipante():
         )
     
     return render_template("removerParticipante.html", participantes=participantesTratados)
+
 
 
 if __name__ == "__main__": 
