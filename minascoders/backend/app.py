@@ -8,6 +8,7 @@ import os
 app = Flask(__name__)
 CORS(app)
 
+# Diretório de onde as imagens serão persistir 
 UPLOAD_FOLDER = 'images'
 
 app = Flask(__name__)
@@ -15,8 +16,48 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 @app.route('/')
-def testeHome():
-    return render_template("index.html")
+def home():
+    cur = mydb.cursor()
+    cur.execute("SELECT nome, nivel, link_site, logo FROM patrocinador")
+    
+    patrocinadores = cur.fetchall()
+    cur.close()
+
+    patrocinadoresTratados = []
+    for patrocinador in patrocinadores:
+        patrocinadoresTratados.append({
+            'nome': patrocinador[0],
+            'nivel': patrocinador[1],
+            'link_site': patrocinador[2],
+            'imagem': patrocinador[3]
+        })
+
+    participantes = get_participantes()
+    return render_template("index.html", patrocinadores=patrocinadoresTratados, participantes=participantes)
+
+def get_participantes():
+    cur = mydb.cursor()
+    cur.execute("""
+            INSERT IGNORE INTO participante (nome, email, link_github, imagem)
+            VALUES ('Ingred Almeida', 'ingred.almeida@ufv.br', 'https://github.com/ingredalmeida1', '/static/images/ingred_perfil.jpeg');
+        """)
+    mydb.commit()
+    cur.close()
+
+    cur = mydb.cursor()
+    cur.execute("SELECT nome, email, link_github, imagem FROM participante")
+    participantes = cur.fetchall()
+    cur.close()
+
+    participantesTratados = []
+    for participante in participantes:
+        participantesTratados.append({
+            'nome': participante[0],
+            'email': participante[1],
+            'link_github': participante[2],
+            'imagem': participante[3],
+        })
+    return participantesTratados
 
 @app.route('/noticias')
 def noticias():
@@ -94,7 +135,7 @@ def salvaImagem(idImagem):
 
     file = request.files[idImagem]
 
-    # Crie a pasta 'uploads' se não existir
+    # Crie a pasta 'images' se não existir
     if not os.path.exists(app.config['UPLOAD_FOLDER']):
         os.makedirs(app.config['UPLOAD_FOLDER'])
     
@@ -106,9 +147,198 @@ def salvaImagem(idImagem):
 
     return filename
 
+def removeImagem(pathDB):
+    pathLogoTratado = pathDB[0][0]
+
+    if os.path.exists(pathLogoTratado):
+        os.remove(pathLogoTratado)
+
 @app.route('/images/<filename>')
 def servidorDeImagem(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+@app.route('/dashboard/home')
+def dashboardHome():
+    return render_template("dashboardHome.html")
+
+@app.route('/dashboard/home/inserirPatrocinador', methods=['GET', 'POST'])
+def inserePatrocinador():
+    if request.method == "POST":
+
+        # Obtendo os dados do formulário
+        nome = request.form['nome']
+        nivel = request.form['nivel']
+        link = request.form['link']
+
+        try:
+            
+            filename = salvaImagem('logo')
+
+            cur = mydb.cursor()
+            cur.execute(
+                """INSERT IGNORE INTO patrocinador 
+                (nome, nivel, link_site, logo) 
+                VALUES (%s, %s, %s, %s)""",
+                (nome, nivel, link, filename)
+            )
+
+            # Faz commit da consulta de inserção sql
+            mydb.commit()
+
+            flash('Notícia adicionada com sucesso!', 'success')
+
+        except Exception as e:
+            mydb.rollback()
+            flash(f'Erro ao adicionar notícia: {str(e)}', 'error')
+        
+        cur.close()
+
+        return redirect(url_for("dashboardHome"))
+    
+    return render_template("inserePatrocinador.html")
+
+@app.route('/dashboard/home/removerPatrocinador', methods=['GET', 'POST'])
+def removePatrocinador():
+    if request.method == "POST":
+
+        nomePatrocinador = request.form['patrocinador']
+
+        try:
+
+            cur = mydb.cursor()
+
+            cur.execute("""SELECT logo 
+                FROM patrocinador 
+                WHERE nome = %s""", (nomePatrocinador,))
+            
+            pathLogo = cur.fetchall()
+            removeImagem(pathLogo)
+
+            cur.execute("""DELETE
+                        FROM patrocinador
+                        WHERE nome = %s""", (nomePatrocinador,))
+
+            mydb.commit()
+            flash('Notícia adicionada com sucesso!', 'success')
+
+        except Exception as e:
+            mydb.rollback()
+            flash(f'Erro ao remover patrocinador: {str(e)}', 'error')
+
+        cur.close()
+
+        return redirect(url_for("dashboardHome"))
+    
+    # Se for GET:
+
+    cur = mydb.cursor()
+    cur.execute("""SELECT nome FROM patrocinador""")
+    
+    patrocinadores = cur.fetchall() # Função que tras as info do cursor para uma var
+    cur.close() # Importantíssimo fechar o cursor
+
+    # Faz o tratamento dos dados
+    patrocinadoresTratados = list()
+    
+    for patrocinador in patrocinadores:
+        patrocinadoresTratados.append(
+            {
+            'nome': patrocinador[0],
+            }
+        )
+    
+    return render_template("removerPatrocinador.html", patrocinadores=patrocinadoresTratados)
+
+@app.route('/dashboard/home/inserirParticipante', methods=['GET', 'POST'])
+def insereParticipante():
+    if request.method == "POST":
+
+        # Obtendo os dados do formulário
+        nome = request.form['nome']
+        email = request.form['email']
+        linkgh = request.form['linkgh']
+
+        try:
+            
+            filename = salvaImagem('imagem')
+
+            cur = mydb.cursor()
+            cur.execute(
+                """INSERT IGNORE INTO participante 
+                (nome, email, link_github, imagem) 
+                VALUES (%s, %s, %s, %s)""",
+                (nome, email, linkgh, filename)
+            )
+
+            # Faz commit da consulta de inserção sql
+            mydb.commit()
+
+            flash('Notícia adicionada com sucesso!', 'success')
+
+        except Exception as e:
+            mydb.rollback()
+            flash(f'Erro ao adicionar notícia: {str(e)}', 'error')
+        
+        cur.close()
+
+
+        return redirect(url_for("dashboardHome"))
+    
+    return render_template("insereParticipante.html")
+
+@app.route('/dashboard/home/removerParticipante', methods=['GET', 'POST'])
+def removeParticipante():
+    if request.method == "POST":
+
+        nomeParticipante = request.form['participante']
+
+        try:
+
+            cur = mydb.cursor()
+            
+            cur.execute("""SELECT imagem 
+                        FROM participante 
+                        WHERE nome = %s""", (nomeParticipante,))
+            
+            pathImagem = cur.fetchall()
+            removeImagem(pathImagem)
+
+            cur.execute("""DELETE
+                        FROM participante
+                        WHERE nome = %s""", (nomeParticipante,))
+
+            mydb.commit()
+            flash('Notícia adicionada com sucesso!', 'success')
+
+        except Exception as e:
+            mydb.rollback()
+            flash(f'Erro ao remover participante: {str(e)}', 'error')
+
+        cur.close()
+
+        return redirect(url_for("dashboardHome"))
+    
+    # Se for GET:
+
+    cur = mydb.cursor()
+    cur.execute("""SELECT nome FROM participante""")
+    
+    participantees = cur.fetchall() # Função que tras as info do cursor para uma var
+    cur.close() # Importantíssimo fechar o cursor
+
+    # Faz o tratamento dos dados
+    participantesTratados = list()
+    
+    for participante in participantees:
+        participantesTratados.append(
+            {
+            'nome': participante[0],
+            }
+        )
+    
+    return render_template("removerParticipante.html", participantes=participantesTratados)
+
+
 
 if __name__ == "__main__": 
 
@@ -121,7 +351,7 @@ if __name__ == "__main__":
 
     # Como o container do banco demora para iniciar
     # o algorítmo fica tentando conectar até ele
-    # liberar as conexões e de fato conectar
+    # liberar as conexões e de fato conectar.
     # a solução dessa gambiarra seria usar Kubernetes talvez
     try:
         mydb = mysql.connector.connect(
