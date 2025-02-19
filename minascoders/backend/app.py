@@ -129,10 +129,12 @@ def removerNoticia():
     if request.method == 'POST':
         titulo = request.form.get('titulo')
 
+    # Deleta a notícia a partir do título e faz commit ao banco
         if titulo:
             cur.execute("DELETE FROM noticia WHERE titulo = %s", (titulo,))
             mydb.commit()  
 
+    # Atualiza a listagem de notícias pós-remoção
     cur.execute("SELECT * FROM noticia ORDER BY data_publicacao DESC")
     noticias = cur.fetchall()
     cur.close()

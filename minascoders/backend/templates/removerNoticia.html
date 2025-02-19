@@ -17,7 +17,6 @@
                 margin-bottom: 2rem;
             }
 
-
             li {
                 margin-bottom: 1rem;
                 padding: 1rem;
@@ -30,14 +29,13 @@
             }
 
             button {
-                background-color: #e74c3c; /* Vermelho para destacar o botão de remover */
+                background-color: #e74c3c; 
                 color: white;
                 border: none;
                 padding: 0.5rem 1rem;
                 border-radius: 5px;
                 font-size: 1rem;
-                cursor: pointer;
-                
+                cursor: pointer;  
             }
 
             .home {
@@ -51,7 +49,6 @@
                 margin: 2rem auto;
                 width: fit-content;
                 text-decoration: none;
-
         }
 
         </style>
@@ -61,13 +58,12 @@
         
         <h1>Gerenciar Notícias</h1>
     
-        
         {% for noticia in noticias %}
             <li>
                 <span>{{ noticia.titulo }}</span>
                 <form action="{{ url_for('removerNoticia') }}" method="post" style="display:inline;">
                     <input type="hidden" name="titulo" value="{{ noticia.titulo }}">
-                    <button type="submit" onclick="return confirm('Tem certeza que deseja remover esta notícia?')">Remover</button>
+                    <button type="submit" onclick="return confirm('Tem certeza que deseja remover a notícia?')">Remover</button>
                 </form>
             </li>
         {% endfor %}
