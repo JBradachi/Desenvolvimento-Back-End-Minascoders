@@ -49,14 +49,15 @@
         <div class="container mt-4">
             <h1>Remover Participante</h1>
             <form class="section" method="post">
-                <label for="participantes">Selecione o participante que deseja remover</label>
+                <label for="participantes">Selecione o participante que deseja remover:</label>
+                <br>
                 <select name="participante" id="participante">
                     {% for participantes in participantes %}
                         <option value="{{ participantes.nome }}"> {{ participantes.nome }} </option>
                     {% endfor %}
                 </select>
                 <br>
-                <button type="submit">Enviar</button>
+                <button type="submit" onclick="return confirm('Tem certeza que deseja remover o participante?')">Remover</button>
             </form>
             <div class="voltar">
                 <a  href="/dashboard/home">

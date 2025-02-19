@@ -49,14 +49,15 @@
         <div class="container mt-4">
             <h1>Remover Patrocinador</h1>
             <form class="section" method="post">
-                <label for="patrocinador">Selecione o patrocinador que deseja remover</label>
+                <label for="patrocinador">Selecione o patrocinador que deseja remover:</label>
+                <br>
                 <select name="patrocinador" id="patrocinador">
                     {% for patrocinador in patrocinadores %}
                         <option value="{{ patrocinador.nome }}"> {{ patrocinador.nome }} </option>
                     {% endfor %}
                 </select>
                 <br>
-                <button type="submit">Enviar</button>
+                <button type="submit" onclick="return confirm('Tem certeza que deseja remover o patrocinador?')">Remover</button>
             </form>
             <div class="voltar">
                 <a  href="/dashboard/home">
