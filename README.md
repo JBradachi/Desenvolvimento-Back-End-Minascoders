@@ -20,5 +20,4 @@ Se quiser para o container (e manter o banco) execute:
 sudo docker compose stop
 ```
 
-Agora acesse [esse link](localhost:5000/)
- 
+Agora acesse [esse link](http//localhost:5000/)
