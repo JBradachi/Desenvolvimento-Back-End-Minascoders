@@ -18,7 +18,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 @app.route('/')
 def home():
     cur = mydb.cursor()
-    cur.execute("SELECT nome, nivel, link_site, imagem FROM patrocinadores")
+    cur.execute("SELECT nome, nivel, link_site, logo FROM patrocinador")
     
     patrocinadores = cur.fetchall()
     cur.close()
@@ -38,14 +38,14 @@ def home():
 def get_participantes():
     cur = mydb.cursor()
     cur.execute("""
-            INSERT IGNORE INTO participantes (nome, email, link_github, imagem)
+            INSERT IGNORE INTO participante (nome, email, link_github, imagem)
             VALUES ('Ingred Almeida', 'ingred.almeida@ufv.br', 'https://github.com/ingredalmeida1', '/static/images/ingred_perfil.jpeg');
         """)
     mydb.commit()
     cur.close()
 
     cur = mydb.cursor()
-    cur.execute("SELECT nome, email, link_github, imagem FROM participantes")
+    cur.execute("SELECT nome, email, link_github, imagem FROM participante")
     participantes = cur.fetchall()
     cur.close()
 
