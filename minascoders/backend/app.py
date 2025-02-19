@@ -47,7 +47,7 @@ def noticias():
     # Passa dados tratados para o html/jinja
     return render_template('noticias.html', noticias=noticiasTratadas)
 
-@app.route('/Dashboard/Noticia/Inserir', methods=['GET', 'POST'])
+@app.route('/dashboard/noticia/inserir', methods=['GET', 'POST'])
 def adicionarNoticia():
     if request.method == 'POST':
 
@@ -111,17 +111,17 @@ def servidorDeImagem(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 
-@app.route('/Dashboard', methods=['GET'])
+@app.route('/dashboard', methods=['GET'])
 def Dashboard():
        
     return render_template("dashboard.html")
 
-@app.route('/Dashboard/Noticia', methods=['GET','POST'])
+@app.route('/dashboard/noticia', methods=['GET','POST'])
 def DashboardNoticia():
         
     return render_template("dashboardNoticia.html")
 
-@app.route('/Dashboard/Noticia/Remover', methods=['GET','POST'])
+@app.route('/dashboard/noticia/remover', methods=['GET','POST'])
 def removerNoticia():
 
     cur = mydb.cursor()
