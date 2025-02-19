@@ -9,7 +9,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Diretório de onde as imagens serão persistir 
-UPLOAD_FOLDER = 'images'
+UPLOAD_FOLDER = 'static/images'
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -18,7 +18,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 @app.route('/')
 def home():
     cur = mydb.cursor()
-    cur.execute("SELECT nome, nivel, link_site, logo FROM patrocinador")
+    cur.execute("SELECT nome, nivel, link_site, logo FROM patrocinador ORDER BY nivel DESC")
     
     patrocinadores = cur.fetchall()
     cur.close()
@@ -36,13 +36,6 @@ def home():
     return render_template("index.html", patrocinadores=patrocinadoresTratados, participantes=participantes)
 
 def get_participantes():
-    cur = mydb.cursor()
-    cur.execute("""
-            INSERT IGNORE INTO participante (nome, email, link_github, imagem)
-            VALUES ('Ingred Almeida', 'ingred.almeida@ufv.br', 'https://github.com/ingredalmeida1', '/static/images/ingred_perfil.jpeg');
-        """)
-    mydb.commit()
-    cur.close()
 
     cur = mydb.cursor()
     cur.execute("SELECT nome, email, link_github, imagem FROM participante")
