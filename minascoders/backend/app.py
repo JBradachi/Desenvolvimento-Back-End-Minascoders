@@ -171,11 +171,31 @@ def removerNoticia():
 
     # Deleta a notícia a partir do título e faz commit ao banco
         if titulo:
-            cur.execute("DELETE FROM noticia WHERE titulo = %s", (titulo,))
-            mydb.commit()  
+            try:
+
+                cur.execute("""SELECT imagem 
+                            FROM noticia 
+                            WHERE titulo = %s""", (titulo,))
+                
+                path_img = cur.fetchall()
+                removeImagem(path_img)
+
+                cur.execute("""DELETE 
+                            FROM noticia 
+                            WHERE titulo = %s""", (titulo,))
+                            
+                mydb.commit()
+
+                flash('Notícia removida com sucesso!', 'success')
+
+            except Exception as e:
+                mydb.rollback()
+                flash(f'Erro ao remover noticia: {str(e)}', 'error')  
 
     # Atualiza a listagem de notícias pós-remoção
-    cur.execute("SELECT * FROM noticia ORDER BY data_publicacao DESC")
+    cur.execute("""SELECT * 
+                   FROM noticia 
+                   ORDER BY data_publicacao DESC""")
     noticias = cur.fetchall()
     cur.close()
 
@@ -183,9 +203,7 @@ def removerNoticia():
     
     for noticia in noticias:
         noticiasTratadas.append(
-            {
-            'titulo': noticia[1],
-            }
+            {'titulo': noticia[1],}
         )
    
     return render_template('removerNoticia.html', noticias=noticiasTratadas)
